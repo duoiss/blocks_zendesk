@@ -7,9 +7,6 @@ include: "*.view"
 include: "*.dashboard"
 
 explore: tickets {
-  ## Add a filter to set a default time period to display in the Explore Window - this will make the queries run faster
-  #   always_filter:
-  #     tickets.created_date: 30 days
   join: category {
     sql_on: ${tickets.group_id} = ${category.id} ;;
     relationship: many_to_one
