@@ -365,16 +365,16 @@ view: tickets {
   }
 
   measure: average_first_reply_time_email {
-    label: "Average First Reply Time Email (Minutes)"
+    label: "Average First Reply Time Email (Hours)"
     type: average
-    sql: ${first_reply_time_email} ;;
+    sql: ${first_reply_time_email}/60 ;;
   }
 
   measure: total_first_reply_time_email {
-    label: "Total First Reply Time Email (Minutes)"
+    label: "Total First Reply Time Email (Hours)"
     description: "Does not make sense to aggregate response time over anything other than ticket number"
     type: sum
-    sql: ${first_reply_time_email} ;;
+    sql: ${first_reply_time_email}/60 ;;
   }
 
   measure: count_chats {
