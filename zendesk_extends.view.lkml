@@ -1,5 +1,6 @@
 include: "_tickets.view.lkml"
 include: "_ticket_history.view.lkml"
+include: "_ticket_tag_history.view.lkml"
 include: "_users.view.lkml"
 include: "_group_memberships.view.lkml"
 include: "_groups.view.lkml"
@@ -460,6 +461,9 @@ view: tickets {
   }
 }
 
+view:  ticket_tag_history {
+  extends: [_ticket_tag_history]
+}
 ### SATISFACTION FIELDS - TO BE INCLUDED ONLY IF YOUR ZENDESK APP UTILIZES SATISFACTION SCORING ###
 
 

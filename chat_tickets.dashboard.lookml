@@ -117,5 +117,3 @@
     limit: 500
     font_size: fit
     text_color: black
-
-
