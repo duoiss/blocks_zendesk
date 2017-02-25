@@ -1,5 +1,5 @@
 view: _users {
-  sql_table_name: zendesk._users ;;
+  sql_table_name: zendesk.users ;;
 
   dimension: id {
     primary_key: yes

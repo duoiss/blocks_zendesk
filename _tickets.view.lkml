@@ -1,5 +1,5 @@
 view: _tickets {
-  sql_table_name: zendesk._tickets ;;
+  sql_table_name: zendesk.tickets ;;
   ### DEFAULT FIELDS ###
 
   dimension: id {

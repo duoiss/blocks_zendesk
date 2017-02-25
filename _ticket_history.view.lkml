@@ -1,5 +1,5 @@
 view: _ticket_history {
-  sql_table_name: zendesk._ticket_history ;;
+  sql_table_name: zendesk.ticket_history ;;
 
   dimension: id {
     primary_key: yes
