@@ -364,6 +364,19 @@ view: tickets {
     sql: ${first_reply_time_chat} ;;
   }
 
+  measure: average_first_reply_time_email {
+    label: "Average First Reply Time Email (Minutes)"
+    type: average
+    sql: ${first_reply_time_email} ;;
+  }
+
+  measure: total_first_reply_time_email {
+    label: "Total First Reply Time Email (Minutes)"
+    description: "Does not make sense to aggregate response time over anything other than ticket number"
+    type: sum
+    sql: ${first_reply_time_email} ;;
+  }
+
   measure: count_chats {
     type: count
 
