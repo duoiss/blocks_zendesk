@@ -10,7 +10,7 @@
           , min(created_at) as first_ticket
           , max(created_at) as latest_ticket
           , 1.0 * COUNT(*)/NULLIF(DATEDIFF(day,MIN(created_at),CURRENT_DATE),0) AS avg_tickets_per_day
-        FROM zendesk._tickets
+        FROM snowflake_salesforce._tickets
         GROUP BY 1
     
 
