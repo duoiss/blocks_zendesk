@@ -1,4 +1,4 @@
-connection: "snowflake_salesforce"
+connection: "snowflake_zendesk"
 
 # include all the views
 include: "*.view"
