@@ -43,7 +43,7 @@
     y_axis_orientation: [left, right]
     ordering: none
     show_null_labels: false
-    
+
   - name: chat_length_by_assignee
     title: 'Chat Length by Assignee'
     type: looker_column
@@ -80,7 +80,7 @@
     y_axis_orientation: [left, right]
     x_axis_label_rotation: 0
     show_null_labels: false
-        
+
   - name: this_weeks_non_chats
     title: "This week's non-chats"
     type: single_value
@@ -117,6 +117,5 @@
     limit: 500
     font_size: fit
     text_color: black
-  
-      
-      
+
+
