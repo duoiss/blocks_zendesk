@@ -41,6 +41,13 @@ explore: tickets {
     relationship: one_to_many
     fields: [ticket_id, new_value, total_agent_touches]
   }
+
+  join:  ticket_tag_history {
+    view_label: "Ticket Tags"
+    sql_on: ${ticket_tag_history.ticket_id} = ${tickets.id} ;;
+    relationship: many_to_one
+    fields: [count, tag, timestamp, action]
+  }
 }
 
 ## Create "ticket_history" as new explore, because not all tickets have a history, so left_joining
