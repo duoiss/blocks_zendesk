@@ -386,6 +386,14 @@ view: tickets {
       END);;
   }
 
+  measure: average_resolution_date {
+    type: average
+    sql:MAX(CASE
+      WHEN ${ticket_history.new_value} = 'solved' then ${ticket_history.timestamp_date}
+      WHEN ${ticket_history.new_value} = 'closed' then ${ticket_history.timestamp_date}
+      END)-${created_date};;
+  }
+
   measure: count_chats {
     type: count
 
