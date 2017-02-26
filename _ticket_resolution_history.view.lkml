@@ -25,7 +25,7 @@ view: _ticket_resolution_history {
 
   dimension: timestamp {
     type: string
-    sql: ${TABLE}.TIMESTAMP ;;
+    sql: MAX(${TABLE}.TIMESTAMP) ;;
   }
 
   dimension: updater_id {
