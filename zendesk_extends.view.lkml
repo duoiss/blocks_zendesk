@@ -49,6 +49,11 @@ view: ticket_history {
     type: average
     sql: ${number_of_agent_touches} ;;
   }
+
+  dimension_group: first_close_date {
+    type: time
+    sql: ${new_value} = 'closed' ;;
+  }
 }
 
 view: tickets {
@@ -169,6 +174,7 @@ view: tickets {
       }
     }
   }
+
 
   dimension_group: time {
     type: time
