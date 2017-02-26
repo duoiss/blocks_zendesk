@@ -64,7 +64,7 @@ view: ticket_history {
 
   dimension: resolution_time {
     type: number
-    sql: DATEDIFF(HOUR,${first_close_time}=${first_open_time}) ;;
+    sql: DATEDIFF(HOUR,${first_close_time},${first_open_time}) ;;
   }
 
   measure: average_resolution {
