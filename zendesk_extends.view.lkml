@@ -52,7 +52,7 @@ view: ticket_history {
 
   dimension_group: first_close {
     type: time
-    sql: CASE WHEN ${new_value}='resolved' THEN ${timestamp_date} ELSE NULL END;;
+    sql: CASE WHEN ${new_value}='closed' THEN ${timestamp_date} ELSE NULL END;;
   }
 }
 
