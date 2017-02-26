@@ -477,7 +477,7 @@ view: tickets {
   dimension_group: first_close {
     type: time
     timeframes: [time, date, week, month]
-    sql: CASE WHEN ${ticket_history.new_value}='closed' THEN ${ticket_history.timestamp_date} ELSE NULL END;;
+    sql: CASE WHEN ${ticket_history.new_value}='close' THEN ${ticket_history.timestamp_date} ELSE NULL END;;
   }
 
   dimension_group: first_open {
