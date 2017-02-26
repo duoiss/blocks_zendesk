@@ -477,13 +477,18 @@ view: tickets {
   dimension_group: first_close {
     type: time
     timeframes: [time, date, week, month]
-    sql: CASE WHEN ${ticket_history.new_value}='close' THEN ${ticket_history.timestamp_date} ELSE NULL END;;
+    sql: CASE
+      WHEN ${ticket_history.new_value}='closed' THEN ${ticket_history.timestamp_date}
+      WHEN ${ticket_history.new_value}='resolved' THEN ${ticket_history.timestamp_date}
+      WHEN ${ticket_history.new_value}='deleted' THEN ${ticket_history.timestamp_date}
+      ELSE NULL END;;
   }
 
   dimension_group: first_open {
     type: time
     timeframes: [time, date, week, month]
-    sql: CASE WHEN ${ticket_history.new_value}='new' THEN ${ticket_history.timestamp_date} ELSE NULL END;;
+    sql: CASE
+      WHEN ${ticket_history.new_value}='new' THEN ${ticket_history.timestamp_date} ELSE NULL END;;
   }
 
   dimension: resolution_time {
