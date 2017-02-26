@@ -378,7 +378,7 @@ view: tickets {
     sql: ${first_reply_time_email}/60 ;;
   }
 
-  dimension: resolution_date {
+  measure: resolution_date {
     type: date
     sql:MAX(CASE
       WHEN ${ticket_history.new_value} = 'solved' then ${ticket_history.timestamp_date}
