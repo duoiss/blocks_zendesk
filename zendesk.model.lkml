@@ -34,9 +34,13 @@ explore: tickets {
   }
 
   join: ticket_history {
-    view_label: "Ticket History"
     sql_on: ${ticket_history.ticket_id} = ${tickets.id} ;;
-    relationship: one_to_many
+    relationship: many_to_one
+  }
+
+  join: _ticket_resolution_history {
+    sql_on: ${_ticket_resolution_history.ticket_id} = ${tickets.id} AND ${ticket_history.new_value}='solved' ;;
+    relationship: one_to_one
   }
 
   join:  ticket_tag_history {
