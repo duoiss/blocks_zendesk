@@ -37,7 +37,6 @@ explore: tickets {
     view_label: "Ticket History"
     sql_on: ${ticket_history.ticket_id} = ${tickets.id} ;;
     relationship: one_to_many
-    fields: [ticket_id, new_value, total_agent_touches]
   }
 
   join:  ticket_tag_history {
