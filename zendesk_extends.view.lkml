@@ -378,6 +378,13 @@ view: tickets {
     sql: ${first_reply_time_email}/60 ;;
   }
 
+  measure: resolution_date {
+    type: max
+    sql:CASE
+      WHEN ${ticket_history.new_value} = 'solved' then ${ticket_history.timestamp_date}
+      WHEN ${ticket_history.new_value} = 'closed' then ${ticket_history.timestamp_date}
+      END;;
+  }
   measure: count_chats {
     type: count
 
