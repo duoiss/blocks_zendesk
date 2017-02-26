@@ -378,12 +378,12 @@ view: tickets {
     sql: ${first_reply_time_email}/60 ;;
   }
 
-  measure: resolution_date {
+  dimension: resolution_date {
     type: date
-    sql:MAX(CASE
-      WHEN ${ticket_history.new_value} = 'solved' then ${ticket_history.timestamp_date}
-      WHEN ${ticket_history.new_value} = 'closed' then ${ticket_history.timestamp_date}
-      END);;
+    sql:CASE
+      WHEN ${ticket_history.new_value} = 'solved' and ${ticket_history.property} = 'status' then ${ticket_history.timestamp_date}
+      WHEN ${ticket_history.new_value} = 'closed' and ${ticket_history.property} = 'status' then ${ticket_history.timestamp_date}
+      END;;
   }
 
   measure: average_resolution_date {
