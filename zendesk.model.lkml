@@ -34,10 +34,8 @@ explore: tickets {
   }
 
   join: ticket_history {
-    ## a view_label parameter changes the name of the view in the Explore section
-    view_label: "Tickets"
+    view_label: "Ticket History"
     sql_on: ${ticket_history.ticket_id} = ${tickets.id} ;;
-    ## use one_to_one to force a fanout on tickets
     relationship: one_to_many
     fields: [ticket_id, new_value, total_agent_touches]
   }
