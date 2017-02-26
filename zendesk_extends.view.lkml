@@ -1,5 +1,6 @@
 include: "_tickets.view.lkml"
 include: "_ticket_history.view.lkml"
+include: "_ticket_status_history.view.lkml"
 include: "_ticket_tag_history.view.lkml"
 include: "_users.view.lkml"
 include: "_group_memberships.view.lkml"
@@ -19,6 +20,10 @@ view: category_memberships {
 
 view: users {
   extends: [_users]
+}
+
+view: ticket_status_history {
+  extends: [_ticket_status_history]
 }
 
 view: ticket_history {
@@ -381,7 +386,7 @@ view: tickets {
   dimension: resolution_date {
     type: date
     sql:CASE
-      WHEN ${ticket_history.new_value} = 'solved' and ${ticket_history.property} = 'status' then ${ticket_history.timestamp_date}
+      WHEN ${ticket_history.new_value} = 'solved' then ${ticket_history.timestamp_date}
       END;;
   }
 
@@ -485,39 +490,12 @@ view: tickets {
       value: "No"
     }
   }
-
-  dimension_group: first_close {
-    type: time
-    timeframes: [time, date, week, month]
-    sql: CASE
-      WHEN ${ticket_history.new_value}='closed' THEN ${ticket_history.timestamp_date}
-      WHEN ${ticket_history.new_value}='solved' THEN ${ticket_history.timestamp_date}
-      WHEN ${ticket_history.new_value}='deleted' THEN ${ticket_history.timestamp_date}
-      ELSE NULL END;;
-  }
-
-  dimension_group: first_open {
-    type: time
-    timeframes: [time, date, week, month]
-    sql: CASE
-      WHEN ${ticket_history.new_value}='new' THEN ${ticket_history.timestamp_date} ELSE NULL END;;
-  }
-
-  dimension: resolution_time {
-    type: number
-    sql: DATEDIFF(HOUR,${first_close_time},${first_open_time}) ;;
-  }
-
-  measure: average_resolution {
-    type: average
-    sql: ${resolution_time} ;;
-  }
-
 }
 
 view:  ticket_tag_history {
   extends: [_ticket_tag_history]
 }
+
 ### SATISFACTION FIELDS - TO BE INCLUDED ONLY IF YOUR ZENDESK APP UTILIZES SATISFACTION SCORING ###
 
 

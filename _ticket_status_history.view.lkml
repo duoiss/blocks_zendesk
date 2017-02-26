@@ -1,4 +1,4 @@
-view: _ticket_history {
+view: _ticket_status_history {
   sql_table_name:  zendesk.ticket_history ;;
 
   dimension: id {
