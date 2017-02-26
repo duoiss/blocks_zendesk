@@ -1,5 +1,7 @@
 view: _ticket_history {
-  sql_table_name: zendesk.ticket_history ;;
+  derived_table: {
+   sql: SELECT * FROM ticket_history where Property = 'status' ;;
+  }
 
   dimension: id {
     primary_key: yes
