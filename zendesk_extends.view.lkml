@@ -50,9 +50,9 @@ view: ticket_history {
     sql: ${number_of_agent_touches} ;;
   }
 
-  dimension_group: first_close_date {
+  dimension_group: first_close {
     type: time
-    sql: CASE WHEN ${new_value}='resolved' OR ${new_value} = 'closed' THEN ${timestamp_date} ELSE NULL;;
+    sql: CASE WHEN ${new_value}='resolved' THEN ${timestamp_date} ELSE NULL END;;
   }
 }
 
