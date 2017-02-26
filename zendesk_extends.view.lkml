@@ -62,9 +62,14 @@ view: ticket_history {
     sql: CASE WHEN ${new_value}='new' THEN ${timestamp_date} ELSE NULL END;;
   }
 
-  dimension_group: resolution {
-    type: time
+  dimension: resolution_time {
+    type: number
     sql: DATEDIFF(HOUR,${first_close_time}=${first_open_time}) ;;
+  }
+
+  measure: average_resolution {
+    type: average
+    sql: ${resolution_time} ;;
   }
 }
 
