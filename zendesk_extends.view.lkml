@@ -49,28 +49,6 @@ view: ticket_history {
     type: average
     sql: ${number_of_agent_touches} ;;
   }
-
-  dimension_group: first_close {
-    type: time
-    timeframes: [time, date, week, month]
-    sql: CASE WHEN ${new_value}='closed' THEN ${timestamp_date} ELSE NULL END;;
-  }
-
-  dimension_group: first_open {
-    type: time
-    timeframes: [time, date, week, month]
-    sql: CASE WHEN ${new_value}='new' THEN ${timestamp_date} ELSE NULL END;;
-  }
-
-  dimension: resolution_time {
-    type: number
-    sql: DATEDIFF(HOUR,${first_close_time},${first_open_time}) ;;
-  }
-
-  measure: average_resolution {
-    type: average
-    sql: ${resolution_time} ;;
-  }
 }
 
 view: tickets {
@@ -495,6 +473,29 @@ view: tickets {
       value: "No"
     }
   }
+
+  dimension_group: first_close {
+    type: time
+    timeframes: [time, date, week, month]
+    sql: CASE WHEN ${ticket_history.new_value}='closed' THEN ${ticket_history.timestamp_date} ELSE NULL END;;
+  }
+
+  dimension_group: first_open {
+    type: time
+    timeframes: [time, date, week, month]
+    sql: CASE WHEN ${ticket_history.new_value}='new' THEN ${ticket_history.timestamp_date} ELSE NULL END;;
+  }
+
+  dimension: resolution_time {
+    type: number
+    sql: DATEDIFF(HOUR,${first_close_time},${first_open_time}) ;;
+  }
+
+  measure: average_resolution {
+    type: average
+    sql: ${resolution_time} ;;
+  }
+
 }
 
 view:  ticket_tag_history {
