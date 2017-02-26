@@ -479,7 +479,7 @@ view: tickets {
     timeframes: [time, date, week, month]
     sql: CASE
       WHEN ${ticket_history.new_value}='closed' THEN ${ticket_history.timestamp_date}
-      WHEN ${ticket_history.new_value}='resolved' THEN ${ticket_history.timestamp_date}
+      WHEN ${ticket_history.new_value}='solved' THEN ${ticket_history.timestamp_date}
       WHEN ${ticket_history.new_value}='deleted' THEN ${ticket_history.timestamp_date}
       ELSE NULL END;;
   }
