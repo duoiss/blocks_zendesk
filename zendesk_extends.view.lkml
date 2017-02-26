@@ -52,7 +52,19 @@ view: ticket_history {
 
   dimension_group: first_close {
     type: time
+    timeframes: [time, date, week, month]
     sql: CASE WHEN ${new_value}='closed' THEN ${timestamp_date} ELSE NULL END;;
+  }
+
+  dimension_group: first_open {
+    type: time
+    timeframes: [time, date, week, month]
+    sql: CASE WHEN ${new_value}='new' THEN ${timestamp_date} ELSE NULL END;;
+  }
+
+  measure: average_resolution {
+    type: number
+    sql: DATEDIFF(HOUR,${first_close_time}=${first_open_time}) ;;
   }
 }
 
