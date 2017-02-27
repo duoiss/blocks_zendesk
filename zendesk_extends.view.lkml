@@ -383,7 +383,7 @@ view: tickets {
     type: date
     sql:CASE
       WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='resolved' THEN  ${ticket_history.timestamp_date}
-      ELSE WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='closed' THEN  ${ticket_history.timestamp_date}
+      WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='closed' THEN  ${ticket_history.timestamp_date}
       END
     ;;
   }
