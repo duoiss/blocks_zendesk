@@ -384,10 +384,9 @@ view: tickets {
     sql:${ticket_history.timestamp_date};;
   }
 
-  measure: average_resolution_date {
-    type: average
-    sql:CASE
-      WHEN ${ticket_history.property} = 'status' AND ${ticket_history.new_value} ='resolved' THEN ${resolution_date} END;;
+  measure: average_resolution {
+    type: number
+    sql: DATEDIFF(HOUR,${resolution_date}-${created_date});;
   }
 
   measure: count_chats {
