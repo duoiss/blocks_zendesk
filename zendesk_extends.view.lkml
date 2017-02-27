@@ -381,7 +381,11 @@ view: tickets {
 
   dimension: resolution_date {
     type: date
-    sql:${ticket_history.timestamp_date};;
+    sql:CASE
+      WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='resolved' THEN  ${ticket_history.timestamp_date}
+      ELSE WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='closed' THEN  ${ticket_history.timestamp_date}
+      END
+    ;;
   }
 
   measure: average_resolution {
