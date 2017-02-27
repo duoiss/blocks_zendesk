@@ -6,6 +6,7 @@ include: "_users.view.lkml"
 include: "_group_memberships.view.lkml"
 include: "_groups.view.lkml"
 include: "_organizations.view.lkml"
+
 view: organizations {
   extends: [_organizations]
 }
@@ -385,14 +386,13 @@ view: tickets {
 
   dimension: resolution_date {
     type: date
-    sql:CASE
-      WHEN ${ticket_history.new_value} = 'solved' then ${ticket_history.timestamp_date}
-      END;;
+    sql:${ticket_history.timestamp_date};;
   }
 
   measure: average_resolution_date {
     type: average
-    sql:${resolution_date};;
+    sql:CASE
+      WHEN ${ticket_history.property} = 'status' AND $ticket_history.status ='resolved' THEN ${resolution_date} END;;
   }
 
   measure: count_chats {

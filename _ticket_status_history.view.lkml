@@ -1,5 +1,7 @@
 view: _ticket_status_history {
-  sql_table_name:  zendesk.ticket_history ;;
+  derived_table:{
+    sql: SELECT * FROM zendesk.ticket_status where property ='status' ;;
+  }
 
   dimension: id {
     primary_key: yes
@@ -37,10 +39,5 @@ view: _ticket_status_history {
   dimension: via {
     type: string
     sql: ${TABLE}.via ;;
-  }
-
-  measure: count {
-    type: count
-    drill_fields: [id]
   }
 }
