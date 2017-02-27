@@ -386,7 +386,7 @@ view: tickets {
 
   measure: average_resolution {
     type: number
-    sql: DATEDIFF(HOUR,${resolution_date}-${created_date});;
+    sql: DATEDIFF(HOUR,${resolution_date},${created_date});;
   }
 
   measure: count_chats {
