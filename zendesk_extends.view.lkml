@@ -379,8 +379,8 @@ view: tickets {
     sql: ${first_reply_time_email}/60 ;;
   }
 
-  dimension: resolution_date {
-    type: date_time
+  dimension_group: resolution_date {
+    type: time
     sql:CASE
       WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='solved' THEN  ${ticket_history.timestamp_date}
       WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='closed' THEN  ${ticket_history.timestamp_date}
@@ -390,7 +390,10 @@ view: tickets {
 
   measure: average_resolution {
     type: number
-    sql: DATEDIFF(HOUR,${resolution_date},${created_date});;
+    sql: DATEDIFF(HOUR,(CASE
+      WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='solved' THEN  ${ticket_history.timestamp_date}
+      WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='closed' THEN  ${ticket_history.timestamp_date}
+      END),${created_date});;
   }
 
   measure: count_chats {
