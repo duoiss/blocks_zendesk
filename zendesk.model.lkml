@@ -46,17 +46,3 @@ explore: tickets {
   }
 
 }
-
-## Create "ticket_history" as new explore, because not all tickets have a history, so left_joining
-explore: ticket_history {
-  join: tickets {
-    sql_on: ${ticket_history.ticket_id} = ${tickets.id} ;;
-    relationship: many_to_one
-  }
-  join: category {
-    sql_on: ${tickets.group_id} = ${category.id} ;;
-    relationship: many_to_one
-  }
-}
-
-explore: ticket_history_audit {}
