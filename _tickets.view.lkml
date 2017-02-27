@@ -143,6 +143,7 @@ view: _tickets {
 
   measure: count {
     type: count_distinct
+    sql: ${tickets.id} ;;
     drill_fields: [id, requester_name]
   }
 }
