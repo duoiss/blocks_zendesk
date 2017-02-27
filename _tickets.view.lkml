@@ -142,7 +142,7 @@ view: _tickets {
   }
 
   measure: count {
-    type: count
+    type: count_distinct
     drill_fields: [id, requester_name]
   }
 }
