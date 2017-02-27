@@ -33,12 +33,6 @@ explore: tickets {
     relationship: many_to_one
   }
 
-  join: ticket_status_history  {
-    view_label: "Ticket Status History"
-    sql_on: ${ticket_status_history.property} = 'status' AND ${ticket_history.ticket_id} = ${tickets.id}  ;;
-    relationship: many_to_one
-  }
-
   join: ticket_history {
     sql_on: ${ticket_history.ticket_id} = ${tickets.id} ;;
     relationship: many_to_one

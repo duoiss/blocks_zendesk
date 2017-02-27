@@ -1,6 +1,5 @@
 include: "_tickets.view.lkml"
 include: "_ticket_history.view.lkml"
-include: "_ticket_status_history.view.lkml"
 include: "_ticket_tag_history.view.lkml"
 include: "_users.view.lkml"
 include: "_group_memberships.view.lkml"
@@ -21,10 +20,6 @@ view: category_memberships {
 
 view: users {
   extends: [_users]
-}
-
-view: ticket_status_history {
-  extends: [_ticket_status_history]
 }
 
 view: ticket_history {
