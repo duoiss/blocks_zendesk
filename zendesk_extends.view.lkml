@@ -392,7 +392,7 @@ view: tickets {
   measure: average_resolution_date {
     type: average
     sql:CASE
-      WHEN ${ticket_history.property} = 'status' AND $ticket_history.status ='resolved' THEN ${resolution_date} END;;
+      WHEN ${ticket_history.property} = 'status' AND ${ticket_history.new_value} ='resolved' THEN ${resolution_date} END;;
   }
 
   measure: count_chats {
