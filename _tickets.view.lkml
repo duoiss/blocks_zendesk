@@ -123,6 +123,11 @@ view: _tickets {
     sql: ${TABLE}.ticket_form_id ;;
   }
 
+  dimension: time_in_hours {
+    type: number
+    sql: ${TABLE}.time_in_hours ;;
+  }
+
   dimension: type {
     sql: ${TABLE}.type ;;
   }
