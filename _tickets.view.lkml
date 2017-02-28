@@ -125,7 +125,7 @@ view: _tickets {
 
   dimension: time_in_hours {
     type: number
-    sql: ${TABLE}.time_in_hours ;;
+    sql: ${TABLE}.time_in_hours_ ;;
   }
 
   dimension: type {
