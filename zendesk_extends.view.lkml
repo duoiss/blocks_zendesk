@@ -86,41 +86,6 @@ view: tickets {
        ;;
   }
 
-  measure: count_backlogged_tickets {
-    type: count
-
-    filters: {
-      field: is_backlogged
-      value: "Yes"
-    }
-  }
-
-  measure: count_new_tickets {
-    type: count
-
-    filters: {
-      field: is_new
-      value: "Yes"
-    }
-  }
-
-  measure: count_open_tickets {
-    type: count
-
-    filters: {
-      field: is_open
-      value: "Yes"
-    }
-  }
-
-  measure: count_solved_tickets {
-    type: count
-
-    filters: {
-      field: is_solved
-      value: "Yes"
-    }
-  }
 
   ############ TIME FIELDS ###########
 
@@ -211,14 +176,7 @@ view: tickets {
 
   dimension_group: chat_start {
     type: time
-    timeframes: [
-      date,
-      week,
-      month,
-      time,
-      day_of_week,
-      hour_of_day
-    ]
+    timeframes: [date,week,month,time,day_of_week,hour_of_day]
     sql: CASE
         WHEN POSITION('PM' IN ${chat_start_time_string}) > 0 OR POSITION('AM' IN ${chat_start_time_string}) > 0
         THEN ${chat_start_time_string}::timestamp
@@ -341,6 +299,55 @@ view: tickets {
     sql: ${first_reply_time_chat} ;;
   }
 
+  dimension_group: resolution {
+    type: time
+    timeframes: [raw,date,time,month]
+    sql:CASE
+      WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='closed' THEN  ${ticket_history.timestamp_time}
+      END;;
+  }
+
+  measure: time_diff_to_resolve {
+    type: number
+    sql: TIMESTAMPDIFF(hour,${resolution_time},${created_time});;
+  }
+
+  measure: count_backlogged_tickets {
+    type: count
+
+    filters: {
+      field: is_backlogged
+      value: "Yes"
+    }
+  }
+
+  measure: count_new_tickets {
+    type: count
+
+    filters: {
+      field: is_new
+      value: "Yes"
+    }
+  }
+
+  measure: count_open_tickets {
+    type: count
+
+    filters: {
+      field: is_open
+      value: "Yes"
+    }
+  }
+
+  measure: count_solved_tickets {
+    type: count
+
+    filters: {
+      field: is_solved
+      value: "Yes"
+    }
+  }
+
   measure: average_chat_duration_minutes {
     description: "As accurate as possible to when the chat \"ended\" but can be thrown off if customers staying on between separate chats."
     type: average
@@ -377,20 +384,6 @@ view: tickets {
     description: "Does not make sense to aggregate response time over anything other than ticket number"
     type: sum
     sql: ${first_reply_time_email}/60 ;;
-  }
-
-  dimension_group: resolution {
-    type: time
-    timeframes: [raw,date,time,month]
-    sql:CASE
-      WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='closed' THEN  ${ticket_history.timestamp_time}
-      END
-    ;;
-  }
-
-  measure: time_diff_to_resolve {
-    type: number
-    sql: TIMESTAMPDIFF(hour,${resolution_time},${created_time});;
   }
 
   measure: count_chats {
