@@ -17,8 +17,9 @@ view: satisfaction_ratings {
     sql: ${TABLE}.COMMENT ;;
   }
 
-  dimension: created_at {
-    type: string
+  dimension_group: created {
+    type: time
+    timeframes: [time,date,week,month]
     sql: ${TABLE}.CREATED_AT ;;
   }
 
