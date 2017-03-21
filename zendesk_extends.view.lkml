@@ -383,7 +383,7 @@ view: tickets {
     type: time
     timeframes: [raw,date,time,month]
     sql:CASE
-      WHEN (${ticket_history.property}='status' AND (${ticket_history.new_value}='solved' OR ${ticket_history.new_value}='closed')) THEN  ${ticket_history.timestamp_time}
+      WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='closed' THEN  ${ticket_history.timestamp_time}
       END
     ;;
   }
