@@ -62,5 +62,9 @@ view: satisfaction_ratings {
   measure: count_good_ratings {
     type: count
     drill_fields: [id, groups.id, groups.name, tickets.id]
+    filters: {
+      field: score
+      value: "good"
+    }
   }
 }
