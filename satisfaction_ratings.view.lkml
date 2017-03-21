@@ -68,12 +68,8 @@ view: satisfaction_ratings {
       value: "good"
     }
   }
-  measure: count_surveys_replied {
+  measure: count_bad_ratings {
     type: count
-    filters: {
-      field: score
-      value: "good"
-    }
     filters: {
       field: score
       value: "bad"
