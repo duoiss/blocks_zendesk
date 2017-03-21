@@ -58,4 +58,9 @@ view: satisfaction_ratings {
     type: count
     drill_fields: [id, groups.id, groups.name, tickets.id]
   }
+
+  measure: count_good_ratings {
+    type: count
+    drill_fields: [id, groups.id, groups.name, tickets.id]
+  }
 }
