@@ -28,6 +28,11 @@ explore: tickets {
     relationship: many_to_one
   }
 
+  join: satisfaction_ratings {
+    sql_on: ${assignee.id} = ${satisfaction_ratings.assignee_id} ;;
+    relationship: one_to_many
+  }
+
   join: ticket_assignee_facts {
     sql_on: ${tickets.assignee_id} = ${ticket_assignee_facts.assignee_id} ;;
     relationship: many_to_one
