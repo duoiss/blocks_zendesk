@@ -383,17 +383,14 @@ view: tickets {
     type: time
     timeframes: [raw,date,time,month]
     sql:CASE
-      WHEN (${ticket_history.property}='status' AND ${ticket_history.new_value}='solved') THEN  ${ticket_history.timestamp_date}
+      WHEN (${ticket_history.property}='status' AND (${ticket_history.new_value}='solved' OR ${ticket_history.new_value}='closed')) THEN  ${ticket_history.timestamp_time}
       END
     ;;
   }
 
-  measure: average_resolution {
+  measure: time_diff_to_resolve {
     type: number
-    sql: DATEDIFF(HOUR,(CASE
-      WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='solved' THEN  ${ticket_history.timestamp_date}
-      WHEN ${ticket_history.property}='status' AND ${ticket_history.new_value}='closed' THEN  ${ticket_history.timestamp_date}
-      END),${created_date});;
+    sql: TIMESTAMPDIFF(hour,${resolution_time},${created_time});;
   }
 
   measure: count_chats {
