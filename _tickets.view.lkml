@@ -151,6 +151,11 @@ view: _tickets {
     sql: ${tickets.id} ;;
     drill_fields: [id, requester_name]
   }
+
+  measure: time_in_hours_total {
+    type: sum
+    sql: ${time_in_hours} ;;
+  }
 }
 
 #   - dimension: assignee_name        ## include only if your Zendesk application utilizes the assignee_name field
