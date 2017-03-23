@@ -75,4 +75,9 @@ view: satisfaction_ratings {
       value: "bad"
     }
   }
+
+  measure: satisfaction_percentage {
+    type: number
+    sql: (${count_good_ratings}/(${count_good_ratings}+${count_bad_ratings}))*100 ;;
+  }
 }
