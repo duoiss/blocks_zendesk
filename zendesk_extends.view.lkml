@@ -333,6 +333,20 @@ view: tickets {
     }
   }
 
+  measure: sum_of_resolution_in_hours {
+    type: sum
+    sql: ${time_diff_to_resolve};;
+    filters: {
+      field: is_solved
+      value: "yes"
+    }
+  }
+
+  measure: mean_time_to_resolve {
+    type: number
+    sql: ${sum_of_resolution_in_hours}/${count_solved_tickets}  ;;
+  }
+
   measure: count_backlogged_tickets {
     type: count
 
