@@ -314,7 +314,6 @@ view: tickets {
   measure: time_diff_to_resolve {
     type: number
     sql: TIMESTAMPDIFF(hour,${created_time},${resolution_time});;
-
   }
 
   measure: count_backlogged_tickets {
