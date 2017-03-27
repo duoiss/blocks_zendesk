@@ -325,7 +325,7 @@ view: tickets {
          END;;
   }
 
-  measure: count_resolution_time_greater_than_8 {
+  measure: count_resolution_time_less_than_8 {
     type: count
     filters: {
       field: less_than_8_hours_to_resolve
