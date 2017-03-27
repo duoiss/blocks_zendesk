@@ -311,9 +311,26 @@ view: tickets {
       END;;
   }
 
-  measure: time_diff_to_resolve {
+  dimension: time_diff_to_resolve {
     type: number
     sql: TIMESTAMPDIFF(hour,${created_time},${resolution_time});;
+  }
+
+  dimension: less_than_8_hours_to_resolve {
+    type: yesno
+    sql: CASE
+          WHEN (${time_diff_to_resolve} < 8)
+            THEN TRUE
+          ELSE FALSE
+         END;;
+  }
+
+  measure: count_resolution_time_greater_than_8 {
+    type: count
+    filters: {
+      field: less_than_8_hours_to_resolve
+      value: "yes"
+    }
   }
 
   measure: count_backlogged_tickets {
