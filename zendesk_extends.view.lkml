@@ -306,14 +306,15 @@ view: tickets {
       WHEN
         (${ticket_history.property}='status'
         AND (${ticket_history.new_value} IN ('closed', 'solved')))
-      THEN  ${ticket_history.timestamp_time}
+      THEN  ${ticket_history.timestamp_time}::timestamp
       else null
       END;;
   }
 
   measure: time_diff_to_resolve {
     type: number
-    sql: TIMESTAMPDIFF(hour,${resolution_time},${created_time});;
+    sql: TIMESTAMPDIFF(hour,${created_time},${resolution_time});;
+
   }
 
   measure: count_backlogged_tickets {
