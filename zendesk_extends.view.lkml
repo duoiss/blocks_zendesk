@@ -75,9 +75,9 @@ view: tickets {
     type:  time
 #     hidden: yes
     timeframes: [raw, date, time, hour_of_day]
-    sql: case when date_part(hour,${created_raw}) <= 8
+    sql: case when date_part(hour,${created_raw}) <= 9
                 then TIMESTAMP_FROM_PARTS(to_date(${created_raw}), '09:00:00')
-              when date_part(hour,${created_raw}) >= 6
+              when date_part(hour,${created_raw}) >= 8
                 then TIMESTAMP_FROM_PARTS(DATEADD(DAY, 1, ${created_raw}), '09:00:00')
               else ${created_raw} end  ;;
   }
@@ -86,9 +86,9 @@ view: tickets {
     type:  time
 #     hidden: yes
     timeframes: [raw, date, time,hour_of_day]
-    sql: case when date_part(hour,${resolution_raw}) >= 6
+    sql: case when date_part(hour,${resolution_raw}) >= 8
                then TIMESTAMP_FROM_PARTS(DATEADD(DAY, 1, ${resolution_raw}), '09:00:00')
-              when date_part(hour,${resolution_raw}) <= 8
+              when date_part(hour,${resolution_raw}) <= 9
                then TIMESTAMP_FROM_PARTS(to_date(${resolution_raw}), '09:00:00')
                else ${resolution_raw} end  ;;
   }
