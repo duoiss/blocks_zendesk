@@ -55,6 +55,81 @@ view: ticket_history {
 view: tickets {
   extends: [_tickets]
 
+####### Start time to response logic
+## Strategy is to
+## 1. Case created and resolution timestamps to only be between 8 and 6
+## 2. Hour diff those fields
+## 3. Date diff those fields using this crazy pattern to exclude weekends
+##      https://discourse.looker.com/t/how-to-count-only-weekdays-between-two-dates/3345
+## 4. Hour diff (2) plus 16-8*Date diff (3)
+## The dimension group created is referenced multiple places but doesn't exist
+## added here by Daniel 3/28
+  dimension_group: created {
+    type: time
+    timeframes: [raw, time, date, hour_of_day, month_num, day_of_month, day_of_week, week, month, quarter, year]
+    sql: ${TABLE}.created_at::timestamp ;;
+  }
+
+  ## Normalize the times into working hours
+  dimension_group: created_adjusted  {
+    type:  time
+#     hidden: yes
+    timeframes: [raw, date, time, hour_of_day]
+    sql: case when date_part(hour,${created_raw}) <= 8
+                then TIMESTAMP_FROM_PARTS(to_date(${created_raw}), '09:00:00')
+              when date_part(hour,${created_raw}) >= 6
+                then TIMESTAMP_FROM_PARTS(DATEADD(DAY, 1, ${created_raw}), '09:00:00')
+              else ${created_raw} end  ;;
+  }
+
+  dimension_group: resolution_adjusted  {
+    type:  time
+#     hidden: yes
+    timeframes: [raw, date, time,hour_of_day]
+    sql: case when date_part(hour,${resolution_raw}) >= 6
+               then TIMESTAMP_FROM_PARTS(DATEADD(DAY, 1, ${resolution_raw}), '09:00:00')
+              when date_part(hour,${resolution_raw}) <= 8
+               then TIMESTAMP_FROM_PARTS(to_date(${resolution_raw}), '09:00:00')
+               else ${resolution_raw} end  ;;
+  }
+
+  ## this was the original dimension
+  dimension: time_diff_to_resolve_raw {
+    type: number
+#     hidden:  yes
+    sql: TIMESTAMPDIFF(hour,${created_adjusted_raw},${resolution_adjusted_raw});;
+  }
+
+  ## Number of hours between the adjusted times
+  dimension: hours_to_resolve {
+    type: number
+#     hidden: yes
+    sql: (${created_adjusted_hour_of_day} - ${resolution_adjusted_hour_of_day});;
+  }
+
+  ## Days between without weekends.  We multiply this by 16-8 and add to the hour diff
+  dimension: days_between_response_no_weekends {
+    type:  number
+#     hidden: yes
+    sql:
+        DATEDIFF('day', ${created_raw}, ${resolution_raw}) - ((FLOOR(DATEDIFF('day', ${created_raw}, ${resolution_raw}) / 7) * 2) +
+        CASE WHEN DATE_PART(dow, ${created_raw}) - DATE_PART(dow, ${resolution_raw}) IN (1, 2, 3, 4, 5) AND DATE_PART(dow, ${resolution_raw}) != 0
+        THEN 2 ELSE 0 END  +
+        CASE WHEN DATE_PART(dow, ${created_raw}) != 0 AND DATE_PART(dow, ${resolution_raw}) = 0
+        THEN 1 ELSE 0 END +
+        CASE WHEN DATE_PART(dow, ${created_raw}) = 0 AND DATE_PART(dow, ${resolution_raw}) != 0
+        THEN 1 ELSE 0 END) ;;
+  }
+
+  ## This is the field that adds up the working hour time to response
+  dimension: time_diff_to_resolve {
+    type: number
+    description: "Total working it took to resolve a ticket"
+    sql:  (${hours_to_resolve} + (${days_between_response_no_weekends}*10.0)) ;;
+  }
+
+################### End working hour response logic ###################
+
   dimension: is_backlogged {
     type: yesno
     sql: ${status} = 'pending' ;;
@@ -97,44 +172,44 @@ view: tickets {
     sql: ${TABLE}.created_at ;;
   }
 
-  dimension: created_day_of_week {
-    case: {
-      when: {
-        sql: ${hidden_created_day_of_week_index} = 6 ;;
-        label: "Sunday"
-      }
+  # dimension: created_day_of_week {
+  #   case: {
+  #     when: {
+  #       sql: ${hidden_created_day_of_week_index} = 6 ;;
+  #       label: "Sunday"
+  #     }
 
-      when: {
-        sql: ${hidden_created_day_of_week_index} = 0 ;;
-        label: "Monday"
-      }
+  #     when: {
+  #       sql: ${hidden_created_day_of_week_index} = 0 ;;
+  #       label: "Monday"
+  #     }
 
-      when: {
-        sql: ${hidden_created_day_of_week_index} = 1 ;;
-        label: "Tuesday"
-      }
+  #     when: {
+  #       sql: ${hidden_created_day_of_week_index} = 1 ;;
+  #       label: "Tuesday"
+  #     }
 
-      when: {
-        sql: ${hidden_created_day_of_week_index} = 2 ;;
-        label: "Wednesday"
-      }
+  #     when: {
+  #       sql: ${hidden_created_day_of_week_index} = 2 ;;
+  #       label: "Wednesday"
+  #     }
 
-      when: {
-        sql: ${hidden_created_day_of_week_index} = 3 ;;
-        label: "Thursday"
-      }
+  #     when: {
+  #       sql: ${hidden_created_day_of_week_index} = 3 ;;
+  #       label: "Thursday"
+  #     }
 
-      when: {
-        sql: ${hidden_created_day_of_week_index} = 4 ;;
-        label: "Friday"
-      }
+  #     when: {
+  #       sql: ${hidden_created_day_of_week_index} = 4 ;;
+  #       label: "Friday"
+  #     }
 
-      when: {
-        sql: ${hidden_created_day_of_week_index} = 5 ;;
-        label: "Saturday"
-      }
-    }
-  }
+  #     when: {
+  #       sql: ${hidden_created_day_of_week_index} = 5 ;;
+  #       label: "Saturday"
+  #     }
+  #   }
+  # }
 
 
   dimension_group: time {
@@ -309,11 +384,6 @@ view: tickets {
       THEN  ${ticket_history.timestamp_time}::timestamp
       else null
       END;;
-  }
-
-  dimension: time_diff_to_resolve {
-    type: number
-    sql: TIMESTAMPDIFF(hour,${created_time},${resolution_time});;
   }
 
   dimension: less_than_8_hours_to_resolve {
