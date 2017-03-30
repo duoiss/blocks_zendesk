@@ -1,5 +1,5 @@
-view: tickets_resolution_calc {
-  sql_table_name: ZENDESK.TICKETS_RESOLUTION_CALC ;;
+view: ticket_resolution_calc {
+  sql_table_name: ZENDESK.TICKET_RESOLUTION_CALC ;;
 
   dimension: id {
     primary_key: yes
@@ -35,6 +35,21 @@ view: tickets_resolution_calc {
   dimension: due_at {
     type: string
     sql: ${TABLE}.DUE_AT ;;
+  }
+
+  dimension: effective_open_time {
+    type: string
+    sql: ${TABLE}.EFFECTIVE_OPEN_TIME ;;
+  }
+
+  dimension: effictive_close_time {
+    type: string
+    sql: ${TABLE}.EFFICTIVE_CLOSE_TIME ;;
+  }
+
+  dimension: effictive_time_to_resolve_hours {
+    type: string
+    sql: ${TABLE}.EFFICTIVE_TIME_TO_RESOLVE_HOURS ;;
   }
 
   dimension: external_id {
