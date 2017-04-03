@@ -157,25 +157,3 @@ view: _tickets {
     sql: ${time_in_hours} ;;
   }
 }
-
-#   - dimension: assignee_name        ## include only if your Zendesk application utilizes the assignee_name field
-#     sql: ${TABLE}.assignee_name
-
-#   - dimension: brand_id      ## include only if your Zendesk application utilizes the brand field
-#     value_format_name: id                ## only associated with Zendesk Enterprise Accounts
-#     type: number
-#     sql: ${TABLE}.brand_id
-
-
-## include below dimension only if your Zendesk application utilizes the collaborator field
-
-#   - dimension: collaborator_ids    ## a ticket may have a collaborator as well, either a single group or one specific agent
-#     type: number    value_format_name: id
-#     sql: ${TABLE}.collaborator_ids
-
-#   - dimension: tags    ## include only if your Zendesk application utilizes the tags feature
-#     description: an array of all tags applied to this ticket
-#     sql: ${TABLE}.tags
-
-#   - dimension: priority           ## include only if your Zendesk application utilizes the priority field
-#     sql: ${TABLE}.priority
