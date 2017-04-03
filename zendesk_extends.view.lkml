@@ -169,7 +169,7 @@ view: tickets {
   ### THIS ASSUMES NO DISTINCTION BETWEEN SOLVED AND CLOSED
   dimension: is_solved {
     type: yesno
-    sql: ${status} = 'solved' OR ${status} = 'closed' ;;
+    sql: ${status} = 'solved' OR ${status} = 'closed';;
   }
 
   dimension: subject_category {
