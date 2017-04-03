@@ -30,7 +30,7 @@ explore: tickets {
 
   join: satisfaction_ratings {
     sql_on: ${tickets.id} = ${satisfaction_ratings.ticket_id} ;;
-    relationship: one_to_many
+    relationship: one_to_one
   }
 
   join: ticket_assignee_facts {
