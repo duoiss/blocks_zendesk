@@ -75,9 +75,9 @@ view: tickets {
     type:  time
 #     hidden: yes
     timeframes: [raw, date, time, hour_of_day]
-    sql: case when date_part(hour,${created_raw}) <= 9
+    sql: case when date_part(hour,${created_raw}) <= 8
                 then TIMESTAMP_FROM_PARTS(to_date(${created_raw}), '09:00:00')
-              when date_part(hour,${created_raw}) >= 20
+              when date_part(hour,${created_raw}) >= 6
                 then TIMESTAMP_FROM_PARTS(DATEADD(DAY, 1, ${created_raw}), '09:00:00')
               else ${created_raw} end  ;;
   }
@@ -86,19 +86,19 @@ view: tickets {
     type:  time
 #     hidden: yes
     timeframes: [raw, date, time,hour_of_day]
-    sql: case when date_part(hour,${resolution_raw}) >= 20
+    sql: case when date_part(hour,${resolution_raw}) >= 6
                then TIMESTAMP_FROM_PARTS(DATEADD(DAY, 1, ${resolution_raw}), '09:00:00')
-              when date_part(hour,${resolution_raw}) <= 9
+              when date_part(hour,${resolution_raw}) <= 8
                then TIMESTAMP_FROM_PARTS(to_date(${resolution_raw}), '09:00:00')
                else ${resolution_raw} end  ;;
   }
 
   ## this was the original dimension
-  dimension: time_diff_to_resolve_raw {
-    type: number
-#     hidden:  yes
-    sql: TIMESTAMPDIFF(hour,${created_adjusted_raw},${resolution_adjusted_raw});;
-  }
+  #dimension: time_diff_to_resolve_raw {
+   # type: number
+   #hidden:  yes
+   #  sql: TIMESTAMPDIFF(hour,${created_adjusted_raw},${resolution_adjusted_raw});;
+  #}
 
   ## Number of hours between the adjusted times
   dimension: hours_to_resolve {
@@ -126,6 +126,27 @@ view: tickets {
     type: number
     description: "Total working it took to resolve a ticket"
     sql:  (${hours_to_resolve} + (${days_between_response_no_weekends}*10.0)) ;;
+  }
+
+  dimension_group: resolution {
+    type: time
+    timeframes: [raw,date,time,month]
+    sql:CASE
+      WHEN
+        (${ticket_history.property}='status'
+        AND (${ticket_history.new_value} IN ('closed', 'solved')))
+      THEN  ${ticket_history.timestamp_time}::timestamp
+      else null
+      END;;
+  }
+
+  dimension: less_than_8_hours_to_resolve {
+    type: yesno
+    sql: CASE
+          WHEN (${time_diff_to_resolve} < 8)
+            THEN TRUE
+          ELSE FALSE
+         END;;
   }
 
 ################### End working hour response logic ###################
@@ -161,62 +182,6 @@ view: tickets {
        ;;
   }
 
-
-  ############ TIME FIELDS ###########
-
-  dimension_group: hidden_created {
-    hidden: yes
-    type: time
-    ###   use day_of_week
-    timeframes: [day_of_week_index]
-    sql: ${TABLE}.created_at ;;
-  }
-
-  # dimension: created_day_of_week {
-  #   case: {
-  #     when: {
-  #       sql: ${hidden_created_day_of_week_index} = 6 ;;
-  #       label: "Sunday"
-  #     }
-
-  #     when: {
-  #       sql: ${hidden_created_day_of_week_index} = 0 ;;
-  #       label: "Monday"
-  #     }
-
-  #     when: {
-  #       sql: ${hidden_created_day_of_week_index} = 1 ;;
-  #       label: "Tuesday"
-  #     }
-
-  #     when: {
-  #       sql: ${hidden_created_day_of_week_index} = 2 ;;
-  #       label: "Wednesday"
-  #     }
-
-  #     when: {
-  #       sql: ${hidden_created_day_of_week_index} = 3 ;;
-  #       label: "Thursday"
-  #     }
-
-  #     when: {
-  #       sql: ${hidden_created_day_of_week_index} = 4 ;;
-  #       label: "Friday"
-  #     }
-
-  #     when: {
-  #       sql: ${hidden_created_day_of_week_index} = 5 ;;
-  #       label: "Saturday"
-  #     }
-  #   }
-  # }
-
-
-  dimension_group: time {
-    type: time
-    timeframes: [hour_of_day]
-    sql: ${TABLE}.created_at ;;
-  }
 
   ############ CHAT FIELDS: INCLUDE ONLY IF YOUR ZENDESK APP UTILIZES CHAT ###########
 
@@ -302,25 +267,7 @@ view: tickets {
   dimension: chat_duration_minutes_tier {
     #     hidden: true
     type: tier
-    tiers: [
-      0,
-      5,
-      10,
-      20,
-      40,
-      60,
-      80,
-      100,
-      120,
-      140,
-      160,
-      180,
-      200,
-      300,
-      400,
-      500,
-      600
-    ]
+    tiers: [0,5,10,20,40,60,80,100,120,140,160,180,200,300,400,500,600]
     sql: ${chat_duration_minutes} ;;
   }
 
@@ -356,43 +303,8 @@ view: tickets {
 
   dimension: first_reply_time_chat_tiers {
     type: tier
-    tiers: [
-      0,
-      5,
-      10,
-      20,
-      40,
-      60,
-      90,
-      120,
-      180,
-      240,
-      300,
-      360,
-      420
-    ]
+    tiers: [0,5,10,20,40,60,90,120,180,240,300,360,420]
     sql: ${first_reply_time_chat} ;;
-  }
-
-  dimension_group: resolution {
-    type: time
-    timeframes: [raw,date,time,month]
-    sql:CASE
-      WHEN
-        (${ticket_history.property}='status'
-        AND (${ticket_history.new_value} IN ('closed', 'solved')))
-      THEN  ${ticket_history.timestamp_time}::timestamp
-      else null
-      END;;
-  }
-
-  dimension: less_than_8_hours_to_resolve {
-    type: yesno
-    sql: CASE
-          WHEN (${time_diff_to_resolve} < 8)
-            THEN TRUE
-          ELSE FALSE
-         END;;
   }
 
   measure: count_resolution_time_less_than_8 {
