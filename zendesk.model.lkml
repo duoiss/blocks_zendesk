@@ -43,26 +43,10 @@ explore: tickets {
     relationship: many_to_one
   }
 
-  join: f_zd_ticket {
-    sql_on: ${f_zd_ticket.ticket_id} = ${tickets.id} ;;
-    relationship: one_to_one
-  }
-
-  join: d_time {
-    sql_on: ${f_zd_ticket.time_id} = ${d_time.time_id} ;;
-    relationship: one_to_one
-  }
-
   join:  ticket_tag_history {
     view_label: "Ticket Tags"
     sql_on: ${ticket_tag_history.ticket_id} = ${tickets.id} ;;
     relationship: many_to_one
     fields: [count, tag, timestamp, action]
   }
-
-  join: ticket_resolution_calc {
-    sql_on: ${tickets.id} = ${ticket_resolution_calc.id} ;;
-    relationship: one_to_one
-  }
-
 }
