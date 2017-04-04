@@ -85,7 +85,7 @@ view: tickets {
 
   dimension_group: resolution_adjusted  {
     type:  time
-#     hidden: yes
+ #   hidden: yes
     timeframes: [raw, date, time,hour_of_day]
     sql: case when date_part(hour,${resolution_raw}) >= 20
                then TIMESTAMP_FROM_PARTS(DATEADD(DAY, 1, ${resolution_raw}), '09:00:00')
@@ -94,24 +94,17 @@ view: tickets {
                else ${resolution_raw} end  ;;
   }
 
-  ## this was the original dimension
-  #dimension: time_diff_to_resolve_raw {
-   # type: number
-   #hidden:  yes
-   #  sql: TIMESTAMPDIFF(hour,${created_adjusted_raw},${resolution_adjusted_raw});;
-  #}
-
   ## Number of hours between the adjusted times
   dimension: hours_to_resolve {
     type: number
-#     hidden: yes
+    hidden: yes
     sql: (${resolution_adjusted_hour_of_day}-${created_adjusted_hour_of_day});;
   }
 
   # Number of minutes between the adjusted times
   dimension: minutes_to_resolve {
     type: number
-#     hidden: yes
+    hidden: yes
     sql: (${hours_to_resolve})*60.0
          + (extract(minute from ${resolution_adjusted_raw}) - extract(minute from ${created_adjusted_raw})) ;;
   }
@@ -120,7 +113,7 @@ view: tickets {
   ## Days between without weekends.  We multiply this by 16-8 and add to the hour diff
   dimension: days_between_response_no_weekends {
     type:  number
-#     hidden: yes
+    hidden: yes
     sql:
         DATEDIFF('day',${created_adjusted_raw},${resolution_adjusted_raw}) - ((FLOOR(DATEDIFF('day', ${created_adjusted_raw}, ${resolution_adjusted_raw}) / 7) * 2) +
         CASE WHEN DATE_PART(dow, ${created_adjusted_raw}) - DATE_PART(dow, ${resolution_adjusted_raw}) IN (1, 2, 3, 4, 5) AND DATE_PART(dow, ${resolution_adjusted_raw}) != 0
@@ -143,6 +136,11 @@ view: tickets {
     sql: (${minutes_to_resolve} +  (${days_between_response_no_weekends}*11.0*60.0)) ;;
   }
 
+  dimension: time_to_resolve_in_hours_float {
+    type: number
+    sql: (${time_diff_to_resolve_in_minutes}/60) ;;
+  }
+
   dimension_group: resolution {
     type: time
     timeframes: [raw,date,time,month]
@@ -158,7 +156,7 @@ view: tickets {
   dimension: less_than_8_hours_to_resolve {
     type: yesno
     sql: CASE
-          WHEN (${time_diff_to_resolve} < 8)
+          WHEN (${time_to_resolve_in_hours_float} < 8)
             THEN TRUE
           ELSE FALSE
          END;;
@@ -330,19 +328,18 @@ view: tickets {
     }
   }
 
+  measure: percentage_of_tickets_less_than_8_hours_to_solve {
+    type: number
+    sql: (${count_resolution_time_less_than_8}/${count_solved_tickets})*100 ;;
+  }
+
   measure: sum_of_resolution_in_hours {
     type: sum
-    sql: ${time_diff_to_resolve};;
+    sql: ${time_to_resolve_in_hours_float};;
     filters: {
       field: is_solved
       value: "yes"
     }
-  }
-
-  measure: total_time_diff_to_resolve_in_minutes {
-    type: sum
-    sql: CASE WHEN ${time_diff_to_resolve}   ;;
-
   }
 
   measure: mean_time_to_resolve {
