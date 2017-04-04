@@ -37,8 +37,8 @@ view: ticket_resolution_calc {
     sql: ${TABLE}.DUE_AT ;;
   }
 
-  dimension: effective_open_time {
-    type: string
+  dimension_group: effective_open_time {
+    type: time
     sql: ${TABLE}.EFFECTIVE_OPEN_TIME ;;
   }
 

@@ -45,8 +45,9 @@ view: satisfaction_ratings {
     sql: ${TABLE}.TICKET_ID ;;
   }
 
-  dimension: updated_at {
-    type: string
+  dimension_group: updated_at {
+    type: time
+    timeframes: [time,date,week,month]
     sql: ${TABLE}.UPDATED_AT ;;
   }
 
