@@ -49,6 +49,11 @@ explore: tickets {
     relationship: many_to_one
     fields: [count, tag, timestamp, action]
   }
+
+  join: ticket_resolution_calc {
+    sql_on: ${ticket_resolution_calc.id} = ${tickets.id} ;;
+    relationship: one_to_one
+  }
 }
 
 explore: f_zd_ticket {
