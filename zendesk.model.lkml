@@ -49,15 +49,24 @@ explore: tickets {
     relationship: many_to_one
     fields: [count, tag, timestamp, action]
   }
+}
 
-  join: f_zd_ticket {
+explore: f_zd_ticket {
+  join: tickets {
     sql_on: ${f_zd_ticket.ticket_id} = ${tickets.id} ;;
-    relationship: one_to_one
+    relationship: many_to_one
+  }
+
+  join: ticket_history {
+    sql_on: ${ticket_history.ticket_id} = ${tickets.id};;
+    relationship: many_to_one
   }
 
   join: d_time {
-    sql_on: ${d_time.time_id} = ${f_zd_ticket.time_id} ;;
-    relationship: many_to_many
+    sql_on: ${f_zd_ticket.time_id} = ${d_time.time_id} ;;
+    relationship: many_to_one
   }
+
+
 
 }

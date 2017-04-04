@@ -34,7 +34,7 @@ view: f_zd_ticket {
 
   measure: count_num_resolved {
     type: sum
-    sql: ${count_num_resolved} ;;
+    sql: ${num_resolved} ;;
   }
 
 }
