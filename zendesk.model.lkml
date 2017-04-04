@@ -67,6 +67,8 @@ explore: f_zd_ticket {
     relationship: many_to_one
   }
 
-
-
+  join: d_ticket {
+    sql_on: ${d_ticket.ticket_id} = ${f_zd_ticket.ticket_id} ;;
+    relationship: many_to_one
+  }
 }
