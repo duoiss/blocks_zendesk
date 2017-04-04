@@ -5,6 +5,7 @@ include: "_users.view.lkml"
 include: "_group_memberships.view.lkml"
 include: "_groups.view.lkml"
 include: "_organizations.view.lkml"
+include: "ticket_history_state.view.lkml"
 
 view: organizations {
   extends: [_organizations]
@@ -74,10 +75,10 @@ view: tickets {
   dimension_group: created_adjusted  {
     type:  time
 #     hidden: yes
-    timeframes: [raw, date, time, hour_of_day]
-    sql: case when date_part(hour,${created_raw}) <= 8
+    timeframes: [raw, date, time, hour_of_day, minute]
+    sql: case when date_part(hour,${created_raw}) <= 9
                 then TIMESTAMP_FROM_PARTS(to_date(${created_raw}), '09:00:00')
-              when date_part(hour,${created_raw}) >= 6
+              when date_part(hour,${created_raw}) >= 20
                 then TIMESTAMP_FROM_PARTS(DATEADD(DAY, 1, ${created_raw}), '09:00:00')
               else ${created_raw} end  ;;
   }
@@ -86,9 +87,9 @@ view: tickets {
     type:  time
 #     hidden: yes
     timeframes: [raw, date, time,hour_of_day]
-    sql: case when date_part(hour,${resolution_raw}) >= 6
+    sql: case when date_part(hour,${resolution_raw}) >= 20
                then TIMESTAMP_FROM_PARTS(DATEADD(DAY, 1, ${resolution_raw}), '09:00:00')
-              when date_part(hour,${resolution_raw}) <= 8
+              when date_part(hour,${resolution_raw}) <= 9
                then TIMESTAMP_FROM_PARTS(to_date(${resolution_raw}), '09:00:00')
                else ${resolution_raw} end  ;;
   }
@@ -104,20 +105,29 @@ view: tickets {
   dimension: hours_to_resolve {
     type: number
 #     hidden: yes
-    sql: (${created_adjusted_hour_of_day} - ${resolution_adjusted_hour_of_day});;
+    sql: (${resolution_adjusted_hour_of_day}-${created_adjusted_hour_of_day});;
   }
+
+  # Number of minutes between the adjusted times
+  dimension: minutes_to_resolve {
+    type: number
+#     hidden: yes
+    sql: (${hours_to_resolve})*60.0
+         + (extract(minute from ${resolution_adjusted_raw}) - extract(minute from ${created_adjusted_raw})) ;;
+  }
+
 
   ## Days between without weekends.  We multiply this by 16-8 and add to the hour diff
   dimension: days_between_response_no_weekends {
     type:  number
 #     hidden: yes
     sql:
-        DATEDIFF('day', ${created_raw}, ${resolution_raw}) - ((FLOOR(DATEDIFF('day', ${created_raw}, ${resolution_raw}) / 7) * 2) +
-        CASE WHEN DATE_PART(dow, ${created_raw}) - DATE_PART(dow, ${resolution_raw}) IN (1, 2, 3, 4, 5) AND DATE_PART(dow, ${resolution_raw}) != 0
+        DATEDIFF('day',${created_adjusted_raw},${resolution_adjusted_raw}) - ((FLOOR(DATEDIFF('day', ${created_adjusted_raw}, ${resolution_adjusted_raw}) / 7) * 2) +
+        CASE WHEN DATE_PART(dow, ${created_adjusted_raw}) - DATE_PART(dow, ${resolution_adjusted_raw}) IN (1, 2, 3, 4, 5) AND DATE_PART(dow, ${resolution_adjusted_raw}) != 0
         THEN 2 ELSE 0 END  +
-        CASE WHEN DATE_PART(dow, ${created_raw}) != 0 AND DATE_PART(dow, ${resolution_raw}) = 0
+        CASE WHEN DATE_PART(dow, ${created_adjusted_raw}) != 0 AND DATE_PART(dow, ${resolution_adjusted_raw}) = 0
         THEN 1 ELSE 0 END +
-        CASE WHEN DATE_PART(dow, ${created_raw}) = 0 AND DATE_PART(dow, ${resolution_raw}) != 0
+        CASE WHEN DATE_PART(dow, ${created_adjusted_raw}) = 0 AND DATE_PART(dow, ${resolution_adjusted_raw}) != 0
         THEN 1 ELSE 0 END) ;;
   }
 
@@ -125,7 +135,12 @@ view: tickets {
   dimension: time_diff_to_resolve {
     type: number
     description: "Total working it took to resolve a ticket"
-    sql:  (${hours_to_resolve} + (${days_between_response_no_weekends}*10.0)) ;;
+    sql:  (${hours_to_resolve} + (${days_between_response_no_weekends}*11.0)) ;;
+  }
+
+  dimension: time_diff_to_resolve_in_minutes {
+    type: number
+    sql: (${minutes_to_resolve} +  (${days_between_response_no_weekends}*11.0*60.0)) ;;
   }
 
   dimension_group: resolution {
@@ -133,9 +148,9 @@ view: tickets {
     timeframes: [raw,date,time,month]
     sql:CASE
       WHEN
-        (${ticket_history.property}='status'
-        AND (${ticket_history.new_value} IN ('closed', 'solved')))
-      THEN  ${ticket_history.timestamp_time}::timestamp
+        (${ticket_history_state.property}='status'
+        AND (${ticket_history_state.new_value} IN ('solved')))
+      THEN  ${ticket_history_state.timestamp_time}::timestamp
       else null
       END;;
   }
@@ -324,6 +339,12 @@ view: tickets {
     }
   }
 
+  measure: total_time_diff_to_resolve_in_minutes {
+    type: sum
+    sql: CASE WHEN ${time_diff_to_resolve}   ;;
+
+  }
+
   measure: mean_time_to_resolve {
     type: number
     sql: ${sum_of_resolution_in_hours}/${count_solved_tickets}  ;;
@@ -358,6 +379,7 @@ view: tickets {
 
   measure: count_solved_tickets {
     type: count
+#     sql: ${id} ;;
 
     filters: {
       field: is_solved

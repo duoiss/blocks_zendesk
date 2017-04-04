@@ -38,9 +38,10 @@ explore: tickets {
     relationship: many_to_one
   }
 
-  join: ticket_history {
-    sql_on: ${ticket_history.ticket_id} = ${tickets.id} ;;
-    relationship: many_to_one
+  join:  ticket_history_state {
+    sql_on: ${tickets.id} = ${ticket_history_state.ticket_id}
+            AND ${ticket_history_state.status_change_number} = 1 ;;
+    relationship: one_to_one
   }
 
   join:  ticket_tag_history {
@@ -65,6 +66,13 @@ explore: f_zd_ticket {
   join: ticket_history {
     sql_on: ${ticket_history.ticket_id} = ${tickets.id};;
     relationship: many_to_one
+  }
+
+  join:  ticket_history_state {
+    fields: []
+    sql_on: ${tickets.id} = ${ticket_history_state.ticket_id}
+      AND ${ticket_history_state.status_change_number} = 1 ;;
+    relationship: one_to_one
   }
 
   join: d_time {
