@@ -344,7 +344,7 @@ view: tickets {
 
   measure: mean_time_to_resolve {
     type: number
-    sql: ${sum_of_resolution_in_hours}/${count_solved_tickets}  ;;
+    sql: round(${sum_of_resolution_in_hours}/${count_solved_tickets},2)  ;;
   }
 
   measure: count_backlogged_tickets {
