@@ -1,15 +1,15 @@
 view: _ticket_tag_history {
   sql_table_name: ZENDESK.TICKET_TAG_HISTORY ;;
 
+  dimension: action {
+    type: string
+    sql: ${TABLE}.ACTION ;;
+  }
+
   dimension: id {
     primary_key: yes
     type: string
     sql: ${TABLE}.ID ;;
-  }
-
-  dimension: action {
-    type: string
-    sql: ${TABLE}.ACTION ;;
   }
 
   dimension: tag {

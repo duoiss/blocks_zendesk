@@ -1,12 +1,6 @@
 view: _groups {
   sql_table_name: zendesk.groups ;;
 
-  dimension: id {
-    primary_key: yes
-    type: number
-    sql: ${TABLE}.id ;;
-  }
-
   dimension_group: created {
     type: time
     timeframes: [time, date, week, month]
@@ -16,6 +10,12 @@ view: _groups {
   dimension: deleted {
     type: yesno
     sql: ${TABLE}.deleted ;;
+  }
+
+  dimension: id {
+    primary_key: yes
+    type: number
+    sql: ${TABLE}.id ;;
   }
 
   dimension: name {

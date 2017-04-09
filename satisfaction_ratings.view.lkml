@@ -1,12 +1,6 @@
 view: satisfaction_ratings {
   sql_table_name: ZENDESK.SATISFACTION_RATINGS ;;
 
-  dimension: id {
-    primary_key: yes
-    type: string
-    sql: ${TABLE}.ID ;;
-  }
-
   dimension: assignee_id {
     type: string
     sql: ${TABLE}.ASSIGNEE_ID ;;
@@ -27,6 +21,12 @@ view: satisfaction_ratings {
     type: string
     # hidden: yes
     sql: ${TABLE}.GROUP_ID ;;
+  }
+
+  dimension: id {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}.ID ;;
   }
 
   dimension: requester_id {

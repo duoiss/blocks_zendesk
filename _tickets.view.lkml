@@ -1,15 +1,7 @@
 view: _tickets {
   sql_table_name: zendesk.tickets ;;
-  ### DEFAULT FIELDS ###
 
-  dimension: id {
-    primary_key: yes
-    sql: ${TABLE}.id ;;
-  }
-
-  ## a ticket can only be assigned to one assignee at a time
   dimension: assignee_id {
-    ## assignees may be a group of agents (represented as one entity), or one specific agent
     type: number
     value_format_name: id
     sql: ${TABLE}.assignee_id ;;
@@ -55,6 +47,11 @@ view: _tickets {
   dimension: has_incidents {
     type: yesno
     sql: ${TABLE}.has_incidents ;;
+  }
+
+  dimension: id {
+    primary_key: yes
+    sql: ${TABLE}.id ;;
   }
 
   dimension: organization_id {

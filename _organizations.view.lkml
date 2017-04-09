@@ -1,12 +1,6 @@
 view: _organizations {
   sql_table_name: zendesk.organizations ;;
 
-  dimension: id {
-    primary_key: yes
-    type: number
-    sql: ${TABLE}.id ;;
-  }
-
   dimension_group: created {
     type: time
     timeframes: [time, date, week, month]
@@ -27,6 +21,12 @@ view: _organizations {
     type: number
     value_format_name: id
     sql: ${TABLE}.group_id ;;
+  }
+
+  dimension: id {
+    primary_key: yes
+    type: number
+    sql: ${TABLE}.id ;;
   }
 
   dimension: name {

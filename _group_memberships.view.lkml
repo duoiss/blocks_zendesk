@@ -1,11 +1,7 @@
 view: _group_memberships {
   sql_table_name: zendesk.group_memberships ;;
 
-  dimension: id {
-    primary_key: yes
-    type: number
-    sql: ${TABLE}.id ;;
-  }
+
 
   dimension: _default {
     type: yesno
@@ -21,6 +17,12 @@ view: _group_memberships {
   dimension: default {
     type: yesno
     sql: ${TABLE}."default" ;;
+  }
+
+  dimension: id {
+    primary_key: yes
+    type: number
+    sql: ${TABLE}.id ;;
   }
 
   dimension: group_id {

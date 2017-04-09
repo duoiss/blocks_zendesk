@@ -8,14 +8,7 @@ view: d_time {
 
   dimension_group: day {
     type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+    timeframes: [raw,date,week,month,quarter,year]
     convert_tz: no
     sql: ${TABLE}.DAY_DATE ;;
   }

@@ -1,12 +1,6 @@
 view: _users {
   sql_table_name: zendesk.users ;;
 
-  dimension: id {
-    primary_key: yes
-    type: number
-    sql: ${TABLE}.id ;;
-  }
-
   dimension: active {
     type: yesno
     sql: ${TABLE}.active ;;
@@ -42,6 +36,12 @@ view: _users {
   dimension: external_id {
     type: string
     sql: ${TABLE}.external_id ;;
+  }
+
+  dimension: id {
+    primary_key: yes
+    type: number
+    sql: ${TABLE}.id ;;
   }
 
   dimension_group: last_login {
