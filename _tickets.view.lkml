@@ -120,6 +120,11 @@ view: _tickets {
     sql: ${TABLE}.ticket_form_id ;;
   }
 
+  dimension: ticket_category_iss {
+    type: string
+    sql: ${TABLE}.TICKET_CATEGORY_ISS_ ;;
+  }
+
   dimension: time_in_hours {
     type: number
     sql: ${TABLE}.time_in_hours_ ;;

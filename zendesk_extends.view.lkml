@@ -86,7 +86,7 @@ view: tickets {
   dimension_group: resolution_adjusted  {
     type:  time
  #   hidden: yes
-    timeframes: [raw, date, time,hour_of_day]
+    timeframes: [raw, date,month, time,hour_of_day]
     sql: case when date_part(hour,${resolution_raw}) >= 20
                then TIMESTAMP_FROM_PARTS(DATEADD(DAY, 1, ${resolution_raw}), '09:00:00')
               when date_part(hour,${resolution_raw}) <= 9

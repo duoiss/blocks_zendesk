@@ -18,7 +18,7 @@ view: f_zd_ticket {
   }
 
   dimension: time_id {
-    type: string
+    type: number
     sql: ${TABLE}.TIME_ID ;;
   }
 
