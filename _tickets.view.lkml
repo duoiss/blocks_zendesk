@@ -151,7 +151,7 @@ view: _tickets {
   measure: count {
     type: count_distinct
     sql: ${tickets.id} ;;
-    drill_fields: [id, requester_name]
+    drill_fields: [id,type,ticket_category_iss,created_month]
   }
 
   measure: time_in_hours_total {
