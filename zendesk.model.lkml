@@ -6,6 +6,8 @@ include: "*.view"
 # include all the dashboards
 include: "*.dashboard"
 
+
+
 explore: tickets {
   join: category {
     sql_on: ${tickets.group_id} = ${category.id} ;;
