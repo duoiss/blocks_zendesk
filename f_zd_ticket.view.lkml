@@ -2,12 +2,12 @@ view: f_zd_ticket {
   sql_table_name: ZENDESK.F_ZD_TICKET ;;
 
   dimension: num_opened {
-    type: string
+    type: number
     sql: ${TABLE}.NUM_OPENED ;;
   }
 
   dimension: num_resolved {
-    type: string
+    type: number
     sql: ${TABLE}.NUM_RESOLVED ;;
   }
 
@@ -20,11 +20,6 @@ view: f_zd_ticket {
   dimension: time_id {
     type: number
     sql: ${TABLE}.TIME_ID ;;
-  }
-
-  measure: count {
-    type: count
-    drill_fields: [tickets.id]
   }
 
   measure: count_num_opened {

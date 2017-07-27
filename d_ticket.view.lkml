@@ -22,8 +22,12 @@ view: d_ticket {
     sql: ${TABLE}.TICKET_STATUS ;;
   }
 
-  measure: count {
+  measure: Current_Open_Tickets {
     type: count
-    drill_fields: [groupname, tickets.id]
+    filters: {
+      field: ticket_status
+      value: "open, new, pending, hold"
+      }
+    drill_fields: [tickets.id]
   }
 }
