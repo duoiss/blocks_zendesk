@@ -32,13 +32,6 @@ view: f_zd_ticket {
     sql: ${TABLE}.TIME_ID ;;
   }
 
-  ##Measure##
-
-  measure: count {
-    type: count
-    drill_fields: [tickets.id]
-  }
-
   measure:  hours_to_first_response_avg {
     type: average
     sql: ${minutes_to_first_response}/60 ;;

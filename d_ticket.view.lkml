@@ -22,8 +22,10 @@ view: d_ticket {
     sql: ${TABLE}.TICKET_STATUS ;;
   }
 
-  measure: count {
+##measure##
+
+  measure: Num_Tickets {
     type: count
-    drill_fields: [groupname, tickets.id]
+    drill_fields: [tickets.id]
   }
 }
