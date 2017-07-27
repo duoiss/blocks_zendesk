@@ -25,7 +25,16 @@ view: d_ticket {
 ##measure##
 
   measure: Num_Tickets {
-    type: count
-    drill_fields: [tickets.id]
+    type: count_distinct
+    sql: ${ticket_id} ;;
+  }
+
+  measure: Num_Current_Open_Tickets {
+    type:  count_distinct
+    sql: ${ticket_id} ;;
+    filters: {
+      field: ticket_status
+      value: "open, new, pending, hold"
+    }
   }
 }
