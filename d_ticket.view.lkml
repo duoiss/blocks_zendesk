@@ -22,6 +22,11 @@ view: d_ticket {
     sql: ${TABLE}.TICKET_STATUS ;;
   }
 
+  dimension: location {
+    type: string
+    sql: ${TABLE}.LOCATION ;;
+  }
+
 ##measure##
 
   measure: Num_Tickets {
