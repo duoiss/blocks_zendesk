@@ -52,4 +52,14 @@ view: f_zd_ticket {
     sql: ${num_resolved} ;;
   }
 
+  measure: num_tickets_resolved_under_8_hrs {
+    type: sum
+    sql:  case when ${minutes_to_resolve} < (8*60) and ${minutes_to_resolve} is not null then 1 else 0 end;;
+  }
+
+  measure: perc_resolved_under_8_hrs {
+
+    sql: ${num_tickets_resolved_under_8_hrs}/(case when sum(${num_resolved}) = 0 then 1 else sum(${num_resolved}) end);;
+  }
+
 }
