@@ -59,7 +59,7 @@ view: f_zd_ticket {
 
   measure: perc_resolved_under_8_hrs {
 
-    sql: ${num_tickets_resolved_under_8_hrs}/(case when sum(${num_resolved}) = 0 then 1 else sum(${num_resolved}) end);;
+    sql: (${num_tickets_resolved_under_8_hrs}/(case when sum(${num_resolved}) = 0 then 1 else sum(${num_resolved}) end))*100;;
   }
 
 }
