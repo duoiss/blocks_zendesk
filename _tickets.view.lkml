@@ -114,6 +114,11 @@ view: _tickets {
     sql: ${TABLE}.submitter_id ;;
   }
 
+  dimension: team_progress {
+    type: string
+    sql: ${TABLE}.TEAM_PROGRESS ;;
+  }
+
   dimension: ticket_form_id {
     type: number
     value_format_name: id
