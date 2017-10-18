@@ -65,6 +65,11 @@ explore: f_zd_ticket {
     relationship: many_to_one
   }
 
+  join: ticket_tag_history {
+    sql_on: ${ticket_tag_history.ticket_id} = ${tickets.id};;
+    relationship: many_to_one
+  }
+
   join: ticket_history {
     sql_on: ${ticket_history.ticket_id} = ${tickets.id};;
     relationship: many_to_one
