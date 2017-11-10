@@ -130,6 +130,16 @@ view: _tickets {
     sql: ${TABLE}.TICKET_CATEGORY_ISS_ ;;
   }
 
+  dimension: ticket_category_security {
+    type: string
+    sql: ${TABLE}.TICKET_CATEGORY_SECURITY_ ;;
+  }
+
+  dimension: ticket_category_compliance {
+    type: string
+    sql: ${TABLE}.TICKET_CATEGORY_COMPLIANCE_ ;;
+  }
+
   dimension: time_in_hours {
     type: number
     sql: ${TABLE}.time_in_hours_ ;;
