@@ -57,6 +57,11 @@ explore: tickets {
     sql_on: ${ticket_resolution_calc.id} = ${tickets.id} ;;
     relationship: one_to_one
   }
+
+  join: users {
+    sql_on: ${tickets.requester_id} = ${users.id} ;;
+    relationship: many_to_one
+  }
 }
 
 explore: f_zd_ticket {

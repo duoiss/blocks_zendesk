@@ -74,11 +74,6 @@ view: _tickets {
     sql: ${TABLE}.recipient ;;
   }
 
-  dimension: requester_email {
-    description: "the requester is the customer who initiated the ticket"
-    sql: ${TABLE}.requester_email ;;
-  }
-
   dimension: requester_id {
     description: "the requester is the customer who initiated the ticket"
     type: number
@@ -90,11 +85,6 @@ view: _tickets {
     type: number
     value_format_name: id
     sql: ${TABLE}.requester_locale_id ;;
-  }
-
-  dimension: requester_name {
-    description: "the requester is the customer who initiated the ticket"
-    sql: ${TABLE}.requester_name ;;
   }
 
   dimension: status {
