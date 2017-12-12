@@ -46,6 +46,11 @@ explore: tickets {
     relationship: one_to_one
   }
 
+  join: ticket_comments {
+    sql_on: ${tickets.id} = ${ticket_comments.ticket_id} ;;
+    relationship: one_to_many
+  }
+
   join:  ticket_tag_history {
     view_label: "Ticket Tags"
     sql_on: ${ticket_tag_history.ticket_id} = ${tickets.id} ;;
@@ -56,6 +61,11 @@ explore: tickets {
   join: ticket_resolution_calc {
     sql_on: ${ticket_resolution_calc.id} = ${tickets.id} ;;
     relationship: one_to_one
+  }
+
+  join: users {
+    sql_on: ${tickets.requester_id} = ${users.id} ;;
+    relationship: many_to_one
   }
 }
 
