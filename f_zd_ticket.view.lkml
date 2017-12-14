@@ -37,6 +37,11 @@ view: f_zd_ticket {
     sql: ${minutes_to_first_response}/60 ;;
   }
 
+  measure:  hours_to_first_response_max {
+    type: max
+    sql: ${minutes_to_first_response}/60 ;;
+  }
+
   measure:  hours_to_resolve_avg {
     type:  average
     sql:  ${minutes_to_resolve}/60 ;;

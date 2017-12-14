@@ -42,4 +42,40 @@ view: d_ticket {
       value: "open, new, pending, hold"
     }
   }
+
+  measure: Num_Open_Tickets {
+    type:  count_distinct
+    sql: ${ticket_id} ;;
+    filters: {
+      field: ticket_status
+      value: "open"
+    }
+  }
+
+  measure: Num_New_Tickets {
+    type:  count_distinct
+    sql: ${ticket_id} ;;
+    filters: {
+      field: ticket_status
+      value: "new"
+    }
+  }
+
+  measure: Num_Pending_Tickets {
+    type:  count_distinct
+    sql: ${ticket_id} ;;
+    filters: {
+      field: ticket_status
+      value: "pending"
+    }
+  }
+
+  measure: Num_Hold_Tickets {
+    type:  count_distinct
+    sql: ${ticket_id} ;;
+    filters: {
+      field: ticket_status
+      value: "hold"
+    }
+  }
 }
