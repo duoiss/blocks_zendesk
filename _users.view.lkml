@@ -1,5 +1,5 @@
 view: _users {
-  sql_table_name: zendesk.users ;;
+  sql_table_name: zendesk.user ;;
 
   dimension: active {
     type: yesno

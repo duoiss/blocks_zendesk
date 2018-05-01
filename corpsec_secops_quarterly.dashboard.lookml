@@ -1,7 +1,7 @@
 - dashboard: secops_quarterly
   title: SecOps Quarterly Dashboard
   layout: newspaper
-  refresh_interval: 5 minutes
+  ##refresh_interval: 5 minutes
   embed_style:
     background_color: "#f6f8fa"
     show_title: false
@@ -605,9 +605,9 @@
     title: Select Month
     type: date_filter
     default_value: 3 months
-    model:
-    explore:
-    field:
-    listens_to_filters: []
+    ##odel:
+    ##explore:
+    ##field:
+    ##listens_to_filters: []
     allow_multiple_values: true
     required: false

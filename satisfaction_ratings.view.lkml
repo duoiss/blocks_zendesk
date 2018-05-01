@@ -1,5 +1,5 @@
 view: satisfaction_ratings {
-  sql_table_name: ZENDESK.SATISFACTION_RATINGS ;;
+  sql_table_name: ZENDESK.SATISFACTION_RATING ;;
 
   dimension: assignee_id {
     type: string

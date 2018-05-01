@@ -1,5 +1,5 @@
 view: _tickets {
-  sql_table_name: zendesk.tickets ;;
+  sql_table_name: zendesk.ticket ;;
 
   dimension: assignee_id {
     type: number
@@ -117,7 +117,7 @@ view: _tickets {
 
   dimension: ticket_category_iss {
     type: string
-    sql: ${TABLE}.TICKET_CATEGORY_ISS_ ;;
+    sql: ${TABLE}.CUSTOM_TICKET_CATEGORY_ISS_ ;;
   }
 
   dimension: ticket_category_security {
