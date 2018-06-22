@@ -1,5 +1,5 @@
 view: ticket_comments {
-  sql_table_name: ZENDESK.TICKET_COMMENTS ;;
+  sql_table_name: ZENDESK.TICKET_COMMENT ;;
 
   dimension: id {
     primary_key: yes

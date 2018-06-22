@@ -1,5 +1,5 @@
 view: _groups {
-  sql_table_name: zendesk.groups ;;
+  sql_table_name: zendesk."group" ;;
 
   dimension_group: created {
     type: time
